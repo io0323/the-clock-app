@@ -4,7 +4,6 @@
   "includeCoAuthoredBy": true,
   "autoMemory": true,
   "cleanupPeriodDays": 30,
-  "gitWorkflow": true,
   "permissions": {
     "allow": [
       "Bash(flutter:*)",
@@ -12,40 +11,11 @@
       "Bash(git:*)",
       "Bash(adb:*)",
       "Bash(grep:*)",
-      "Bash(find:*)",
-      "Bash(cat:*)",
-      "Bash(mkdir:*)",
-      "Bash(mv:*)",
-      "Bash(cp:*)"
+      "Bash(find:*)"
     ],
     "deny": [
       "Bash(rm -rf:*)",
-      "Bash(curl:*)",
-      "Bash(wget:*)"
-    ]
-  },
-  "hooks": {
-    "PreToolUse": [
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "echo '[Claude Code] コマンド実行: $CLAUDE_TOOL_INPUT'"
-          }
-        ]
-      }
-    ],
-    "PostToolUse": [
-      {
-        "matcher": "Write|Edit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "dart format $CLAUDE_TOOL_OUTPUT_PATH 2>/dev/null || true"
-          }
-        ]
-      }
+      "Bash(curl:*)"
     ]
   }
 }
