@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'core/constants/app_theme.dart';
 import 'data/repositories/mock_clock_repository.dart';
 import 'presentation/providers/clock_provider.dart';
+import 'presentation/screens/home/home_screen.dart';
 
 void main() {
   runApp(
@@ -24,11 +25,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'The Clock',
       theme: AppTheme.dark,
-      home: const Scaffold(
-        body: Center(
-          child: Text('The Clock'),
-        ),
-      ),
+      home: const HomeScreen(),
     );
   }
 }
