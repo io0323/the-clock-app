@@ -1,3 +1,16 @@
+# Flutter
+.dart_tool/
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+
+# IDE
+.idea/
+
+# iOS
+ios/Pods/
+ios/.symlinks/
+
 # 環境設定
 .env
 .env.*
