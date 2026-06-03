@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../domain/entities/ble_connection_status.dart';
-import '../../providers/clock_provider.dart';
+import '../../providers/ble_provider.dart';
 import 'connection_status_dot.dart';
 
 class StatusBarWidget extends ConsumerWidget {
@@ -10,7 +10,9 @@ class StatusBarWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final bleStatus = ref.watch(bleStatusProvider);
+    final bleState = ref.watch(bleConnectionStateProvider);
+    final bleStatus = bleState.whenOrNull(data: (s) => s.status)
+        ?? BleConnectionStatus.disconnected;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
