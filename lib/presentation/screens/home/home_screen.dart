@@ -3,43 +3,74 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_text_styles.dart';
+import '../../../domain/entities/ble_connection_status.dart';
+import '../../providers/ble_lifecycle_provider.dart';
+import '../../providers/ble_provider.dart';
 import '../../providers/clock_provider.dart';
+import '../../widgets/ble_error_banner.dart';
 import '../../widgets/clock_face/clock_face_widget.dart';
 import '../../widgets/light_hour_bar/light_hour_bar_widget.dart';
 import '../../widgets/status_bar/status_bar_widget.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    ref.watch(bleLifecycleProvider);
+
+    final bleState = ref.watch(bleConnectionStateProvider);
+    final status = bleState.valueOrNull?.status;
+    final errorMessage = bleState.valueOrNull?.errorMessage;
+    final hasError = status == BleConnectionStatus.error ||
+        status == BleConnectionStatus.lost;
+
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: Stack(
           children: [
-            const SizedBox(height: 24),
-            Text(
-              'The Clock',
-              style: AppTextStyles.displayMedium,
-              textAlign: TextAlign.center,
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const SizedBox(height: 24),
+                Text(
+                  'The Clock',
+                  style: AppTextStyles.displayMedium,
+                  textAlign: TextAlign.center,
+                ),
+                Text(
+                  'BALMUDA Connect',
+                  style: AppTextStyles.labelSmall.copyWith(
+                    color: AppColors.textMuted,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 48),
+                const ClockFaceWidget(),
+                const SizedBox(height: 16),
+                const LightHourBarWidget(),
+                const SizedBox(height: 8),
+                const _TimeTextWidget(),
+                const SizedBox(height: 32),
+                const StatusBarWidget(),
+                const SizedBox(height: 24),
+              ],
             ),
-            Text(
-              'BALMUDA Connect',
-              style: AppTextStyles.labelSmall.copyWith(
-                color: AppColors.textMuted,
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              child: BleErrorBanner(
+                visible: hasError,
+                message: errorMessage ?? 'デバイスとの接続が切断されました。',
+                onReconnect: () {
+                  final device = bleState.valueOrNull?.connectedDevice;
+                  if (device != null) {
+                    ref.read(autoReconnectUseCaseProvider).start(device);
+                  }
+                },
               ),
-              textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 48),
-            const ClockFaceWidget(),
-            const SizedBox(height: 16),
-            const LightHourBarWidget(),
-            const SizedBox(height: 8),
-            const _TimeTextWidget(),
-            const SizedBox(height: 32),
-            const StatusBarWidget(),
-            const SizedBox(height: 24),
           ],
         ),
       ),
