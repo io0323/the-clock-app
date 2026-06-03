@@ -44,6 +44,7 @@ class _ConnectionStatusDotState extends State<ConnectionStatusDot>
         _animation = CurvedAnimation(parent: _controller, curve: Curves.easeInOut);
         _controller.repeat(reverse: true);
       case BleConnectionStatus.error:
+      case BleConnectionStatus.lost:
         _controller.duration = const Duration(milliseconds: 600);
         _animation = CurvedAnimation(parent: _controller, curve: Curves.easeInOut);
         _controller.repeat(reverse: true);
@@ -64,6 +65,7 @@ class _ConnectionStatusDotState extends State<ConnectionStatusDot>
     BleConnectionStatus.connecting => AppColors.amber,
     BleConnectionStatus.disconnected => AppColors.textDim,
     BleConnectionStatus.error => AppColors.error,
+    BleConnectionStatus.lost => AppColors.error,
   };
 
   @override
