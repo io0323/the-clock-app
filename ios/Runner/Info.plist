@@ -41,6 +41,10 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>BALMUDA The Clockとの通信にBluetoothを使用します</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>BALMUDA The Clockとの通信にBluetoothを使用します</string>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
