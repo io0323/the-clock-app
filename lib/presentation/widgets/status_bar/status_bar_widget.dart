@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../domain/entities/ble_connection_status.dart';
 import '../../providers/ble_provider.dart';
+import '../../screens/scan/scan_screen.dart';
 import 'connection_status_dot.dart';
 
 class StatusBarWidget extends ConsumerWidget {
@@ -17,7 +18,16 @@ class StatusBarWidget extends ConsumerWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        _StatusItem(label: 'BLE', status: bleStatus),
+        GestureDetector(
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                builder: (_) => const ScanScreen(),
+              ),
+            );
+          },
+          child: _StatusItem(label: 'BLE', status: bleStatus),
+        ),
         const _StatusItem(label: 'Wi-Fi', status: BleConnectionStatus.connected),
         const _StatusItem(label: 'MQTT', status: BleConnectionStatus.connecting),
       ],
