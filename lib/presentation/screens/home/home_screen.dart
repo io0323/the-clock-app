@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -7,9 +8,12 @@ import '../../../domain/entities/ble_connection_status.dart';
 import '../../providers/ble_lifecycle_provider.dart';
 import '../../providers/ble_provider.dart';
 import '../../providers/clock_provider.dart';
+import '../../providers/mqtt_provider.dart';
 import '../../widgets/ble_error_banner.dart';
 import '../../widgets/clock_face/clock_face_widget.dart';
 import '../../widgets/light_hour_bar/light_hour_bar_widget.dart';
+import '../../widgets/mqtt/message_feed_widget.dart';
+import '../../widgets/sensor/sensor_card_widget.dart';
 import '../../widgets/status_bar/status_bar_widget.dart';
 
 class HomeScreen extends ConsumerWidget {
@@ -29,7 +33,8 @@ class HomeScreen extends ConsumerWidget {
       body: SafeArea(
         child: Stack(
           children: [
-            Column(
+            SingleChildScrollView(
+              child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const SizedBox(height: 24),
@@ -53,9 +58,16 @@ class HomeScreen extends ConsumerWidget {
                 const _TimeTextWidget(),
                 const SizedBox(height: 32),
                 const StatusBarWidget(),
+                const SizedBox(height: 16),
+                if (ref.watch(sensorDataProvider).hasValue)
+                  const SensorCardWidget(),
+                if (kDebugMode) ...[
+                  const SizedBox(height: 16),
+                  const MessageFeedWidget(),
+                ],
                 const SizedBox(height: 24),
               ],
-            ),
+            )),
             Positioned(
               top: 0,
               left: 0,

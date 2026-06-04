@@ -4,6 +4,7 @@ import '../../../core/constants/app_colors.dart';
 import '../../../domain/entities/ble_connection_status.dart';
 import '../../providers/ble_provider.dart';
 import '../../screens/scan/scan_screen.dart';
+import '../mqtt/mqtt_status_widget.dart';
 import 'connection_status_dot.dart';
 
 class StatusBarWidget extends ConsumerWidget {
@@ -26,27 +27,30 @@ class StatusBarWidget extends ConsumerWidget {
               ),
             );
           },
-          child: _StatusItem(label: 'BLE', status: bleStatus),
+          child: _StatusItem(label: 'BLE', child: ConnectionStatusDot(status: bleStatus)),
         ),
-        const _StatusItem(label: 'Wi-Fi', status: BleConnectionStatus.connected),
-        const _StatusItem(label: 'MQTT', status: BleConnectionStatus.connecting),
+        _StatusItem(
+          label: 'Wi-Fi',
+          child: ConnectionStatusDot(status: BleConnectionStatus.connected),
+        ),
+        const _StatusItem(label: 'MQTT', child: MqttStatusWidget()),
       ],
     );
   }
 }
 
 class _StatusItem extends StatelessWidget {
-  const _StatusItem({required this.label, required this.status});
+  const _StatusItem({required this.label, required this.child});
 
   final String label;
-  final BleConnectionStatus status;
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        ConnectionStatusDot(status: status),
+        child,
         const SizedBox(height: 4),
         Text(
           label,
