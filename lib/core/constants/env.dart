@@ -12,6 +12,8 @@ abstract final class Env {
       int.tryParse(dotenv.env['MQTT_PORT'] ?? '') ?? 1883;
   static String get mqttClientId =>
       dotenv.env['MQTT_CLIENT_ID'] ?? 'the_clock_app';
+  static bool get mqttUseTls =>
+      dotenv.env['MQTT_USE_TLS']?.toLowerCase() == 'true';
 
   // BLE
   static String get bleDeviceNamePrefix =>
