@@ -15,6 +15,7 @@ import '../../widgets/light_hour_bar/light_hour_bar_widget.dart';
 import '../../widgets/mqtt/message_feed_widget.dart';
 import '../../widgets/sensor/sensor_card_widget.dart';
 import '../../widgets/status_bar/status_bar_widget.dart';
+import '../alarm/alarm_set_screen.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -58,6 +59,22 @@ class HomeScreen extends ConsumerWidget {
                 const _TimeTextWidget(),
                 const SizedBox(height: 32),
                 const StatusBarWidget(),
+                const SizedBox(height: 8),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                        builder: (_) => const AlarmSetScreen(),
+                      ),
+                    );
+                  },
+                  child: Text(
+                    'アラームを設定',
+                    style: AppTextStyles.labelSmall.copyWith(
+                      color: AppColors.amber,
+                    ),
+                  ),
+                ),
                 const SizedBox(height: 16),
                 if (ref.watch(sensorDataProvider).hasValue)
                   const SensorCardWidget(),
