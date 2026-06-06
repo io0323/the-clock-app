@@ -54,6 +54,6 @@ void main() {
     );
 
     expect(find.text('The Clock'), findsOneWidget);
-    expect(find.text('BALMUDA Connect'), findsOneWidget);
+    expect(find.text('io0323 Connect'), findsOneWidget);
   });
 }

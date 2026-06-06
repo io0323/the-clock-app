@@ -81,7 +81,7 @@ class _ScanScreenState extends ConsumerState<ScanScreen> {
                   const SizedBox(height: 4),
                   Text(
                     isScanning
-                        ? 'BALMUDA_CLOCK を検索中...'
+                        ? 'io0323_CLOCK を検索中...'
                         : '${devices.length} 台のデバイスが見つかりました',
                     style: AppTextStyles.labelSmall.copyWith(
                       color: AppColors.textMuted,

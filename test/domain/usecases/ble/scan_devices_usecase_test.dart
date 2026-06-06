@@ -9,7 +9,7 @@ class MockBleRepository extends Mock implements BleRepository {}
 BleDevice _device({
   required String id,
   required int rssi,
-  String name = 'BALMUDA_CLOCK_TEST',
+  String name = 'io0323_CLOCK_TEST',
 }) {
   return BleDevice(
     id: id,

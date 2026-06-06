@@ -25,7 +25,7 @@ void main() {
     useCase = ConnectDeviceUseCase(mockRepository);
     device = BleDevice(
       id: 'test-id',
-      name: 'BALMUDA_CLOCK_TEST',
+      name: 'io0323_CLOCK_TEST',
       rssi: -60,
       isConnectable: true,
       discoveredAt: DateTime(2026),
