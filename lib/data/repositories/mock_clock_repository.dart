@@ -1,6 +1,6 @@
 import 'package:logger/logger.dart';
 
-import '../../domain/entities/ble_connection_status.dart';
+import '../../core/utils/demo_data.dart';
 import '../../domain/entities/brightness_level.dart';
 import '../../domain/entities/clock_state.dart';
 import '../../domain/repositories/clock_repository.dart';
@@ -10,16 +10,12 @@ class MockClockRepository implements ClockRepository {
 
   @override
   Stream<ClockState> watchClockState() {
+    final hero = DemoData.heroState;
     return Stream.periodic(const Duration(seconds: 1), (_) {
       final now = DateTime.now();
-      return ClockState(
+      return hero.copyWith(
         currentTime: now,
         lightHourProgress: now.hour / 24 + now.minute / 1440,
-        bleStatus: BleConnectionStatus.connected,
-        isAlarmActive: false,
-        alarmTime: '07:30',
-        volume: 0.6,
-        brightness: BrightnessLevel.medium,
       );
     });
   }

@@ -18,5 +18,5 @@ abstract class BleRepository {
 
   Future<int> readRssi();
 
-  static const String deviceNamePrefix = 'BALMUDA_CLOCK';
+  static const String deviceNamePrefix = 'io0323_CLOCK';
 }

@@ -17,7 +17,7 @@ abstract final class Env {
 
   // BLE
   static String get bleDeviceNamePrefix =>
-      dotenv.env['BLE_DEVICE_NAME_PREFIX'] ?? 'BALMUDA_CLOCK';
+      dotenv.env['BLE_DEVICE_NAME_PREFIX'] ?? 'io0323_CLOCK';
   static int get bleConnectionTimeoutSec =>
       int.tryParse(dotenv.env['BLE_CONNECTION_TIMEOUT_SEC'] ?? '') ?? 10;
 }

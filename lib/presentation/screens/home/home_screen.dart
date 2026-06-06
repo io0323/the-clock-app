@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_text_styles.dart';
+import '../../../core/utils/demo_data.dart';
 import '../../../domain/entities/ble_connection_status.dart';
 import '../../providers/ble_lifecycle_provider.dart';
 import '../../providers/ble_provider.dart';
@@ -15,6 +16,8 @@ import '../../widgets/light_hour_bar/light_hour_bar_widget.dart';
 import '../../widgets/mqtt/message_feed_widget.dart';
 import '../../widgets/sensor/sensor_card_widget.dart';
 import '../../widgets/status_bar/status_bar_widget.dart';
+import '../alarm/alarm_firing_screen.dart';
+import '../alarm/alarm_list_screen.dart';
 import '../alarm/alarm_set_screen.dart';
 
 class HomeScreen extends ConsumerWidget {
@@ -45,7 +48,7 @@ class HomeScreen extends ConsumerWidget {
                   textAlign: TextAlign.center,
                 ),
                 Text(
-                  'BALMUDA Connect',
+                  'io0323 Connect',
                   style: AppTextStyles.labelSmall.copyWith(
                     color: AppColors.textMuted,
                   ),
@@ -60,20 +63,61 @@ class HomeScreen extends ConsumerWidget {
                 const SizedBox(height: 32),
                 const StatusBarWidget(),
                 const SizedBox(height: 8),
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute<void>(
-                        builder: (_) => const AlarmSetScreen(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute<void>(
+                            builder: (_) => const AlarmListScreen(),
+                          ),
+                        );
+                      },
+                      child: Text(
+                        'アラーム一覧',
+                        style: AppTextStyles.labelSmall.copyWith(
+                          color: AppColors.amber,
+                        ),
                       ),
-                    );
-                  },
-                  child: Text(
-                    'アラームを設定',
-                    style: AppTextStyles.labelSmall.copyWith(
-                      color: AppColors.amber,
                     ),
-                  ),
+                    const SizedBox(width: 16),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute<void>(
+                            builder: (_) => const AlarmSetScreen(),
+                          ),
+                        );
+                      },
+                      child: Text(
+                        'アラームを設定',
+                        style: AppTextStyles.labelSmall.copyWith(
+                          color: AppColors.amber,
+                        ),
+                      ),
+                    ),
+                    if (kDebugMode) ...[
+                      const SizedBox(width: 16),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute<void>(
+                              builder: (_) => AlarmFiringScreen(
+                                event: DemoData.triggerEvent,
+                              ),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          'アラーム発火',
+                          style: AppTextStyles.labelSmall.copyWith(
+                            color: AppColors.error,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ],
                 ),
                 const SizedBox(height: 16),
                 if (ref.watch(sensorDataProvider).hasValue)
