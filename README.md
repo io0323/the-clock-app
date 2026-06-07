@@ -1,5 +1,10 @@
 # The Clock App — BALMUDA Connect 再設計
 
+![CI](https://github.com/io0323/the-clock-app/workflows/CI/badge.svg)
+![Flutter](https://img.shields.io/badge/Flutter-3.x-02569B?logo=flutter)
+![Dart](https://img.shields.io/badge/Dart-3.x-0175C2?logo=dart)
+![License](https://img.shields.io/badge/License-MIT-green)
+
 > BALMUDA「The Clock」向け Flutter ポートフォリオアプリ。
 > BLE通信・MQTT/クラウド連携・非同期状態管理を横断した設計が中核。
 
