@@ -21,6 +21,9 @@ jobs:
           channel: 'stable'
           cache: true
 
+      - name: .env の作成（CI用ダミー）
+        run: cp .env.example .env
+
       - name: 依存関係のインストール
         run: flutter pub get
 

@@ -166,7 +166,8 @@ class _AlarmCard extends ConsumerWidget {
           ),
           Switch(
             value: alarm.active,
-            activeColor: AppColors.amber,
+            activeThumbColor: AppColors.amber,
+            activeTrackColor: AppColors.amberDim,
             inactiveThumbColor: AppColors.textDim,
             inactiveTrackColor: AppColors.surfaceVariant,
             onChanged: (value) {
