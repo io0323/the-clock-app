@@ -146,30 +146,36 @@ App    ──publish──▶ Broker ──subscribe──▶ Device
 
 ## セットアップ
 
+### 必要環境
+- Flutter 3.x 以上
+- Dart 3.x 以上
+- Android Studio / Xcode
+
+### インストール
 ```bash
-# 依存パッケージのインストール
+git clone https://github.com/io0323/the-clock-app.git
+cd the-clock-app
+cp .env.example .env   # 環境変数を設定
 flutter pub get
-
-# コード生成（Riverpod Generator / Retrofit）
-dart run build_runner build --delete-conflicting-outputs
-
-# アプリ起動
 flutter run
-
-# テスト実行
-flutter test
 ```
 
-### 前提条件
-
-- Flutter SDK 3.x / Dart SDK 3.x
-- Xcode（iOS）/ Android Studio（Android）
-- BLE テストは実機が必要（エミュレータ不可）
-- MQTT 接続にはローカル Broker（`localhost:1883`）または検証環境を使用
+### ローカルMQTTブローカー（開発用）
+```bash
+brew install mosquitto
+brew services start mosquitto
+# .env の MQTT_HOST=localhost を確認
+```
 
 ---
 
-## テスト方針
+## テスト
+
+```bash
+flutter test                    # 全テスト実行
+flutter test --coverage         # カバレッジ計測
+flutter analyze                 # 静的解析
+```
 
 | レイヤー | テスト手法 | ツール |
 |---------|-----------|-------|
@@ -177,6 +183,107 @@ flutter test
 | Data（Repository） | ユニットテスト + Mock | mocktail |
 | BLE / MQTT 結合 | 統合テスト（実機） | flutter_test |
 | Presentation | Widget テスト | flutter_test |
+
+---
+
+## ディレクトリ構成（詳細）
+
+```text
+lib/
+├── core
+│   ├── constants
+│   │   ├── app_colors.dart
+│   │   ├── app_text_styles.dart
+│   │   ├── app_theme.dart
+│   │   ├── env.dart
+│   │   └── mqtt_topics.dart
+│   ├── errors
+│   │   ├── alarm_exception.dart
+│   │   ├── app_exception.dart
+│   │   ├── ble_exception.dart
+│   │   └── mqtt_exception.dart
+│   └── utils
+│       ├── ble_logger.dart
+│       └── demo_data.dart
+├── data
+│   ├── datasources
+│   │   ├── ble_datasource.dart
+│   │   ├── mqtt_datasource.dart
+│   │   └── rest_datasource.dart
+│   └── repositories
+│       ├── ble_repository_impl.dart
+│       ├── mock_clock_repository.dart
+│       └── mqtt_repository_impl.dart
+├── domain
+│   ├── entities
+│   │   ├── alarm_config.dart
+│   │   ├── alarm_sound.dart
+│   │   ├── alarm_trigger_event.dart
+│   │   ├── alarm_weekday.dart
+│   │   ├── ble_connection_state.dart
+│   │   ├── ble_connection_status.dart
+│   │   ├── ble_device.dart
+│   │   ├── brightness_level.dart
+│   │   ├── clock_state.dart
+│   │   ├── device_shadow.dart
+│   │   ├── mqtt_message.dart
+│   │   └── sensor_data.dart
+│   ├── repositories
+│   │   ├── ble_repository.dart
+│   │   ├── clock_repository.dart
+│   │   └── mqtt_repository.dart
+│   └── usecases
+│       ├── ble
+│       │   ├── auto_reconnect_usecase.dart
+│       │   ├── connect_device_usecase.dart
+│       │   └── scan_devices_usecase.dart
+│       └── mqtt
+│           ├── connect_mqtt_usecase.dart
+│           ├── publish_alarm_usecase.dart
+│           ├── sync_device_shadow_usecase.dart
+│           └── watch_sensor_usecase.dart
+├── main.dart
+└── presentation
+    ├── providers
+    │   ├── ble_lifecycle_provider.dart
+    │   ├── ble_provider.dart
+    │   ├── clock_provider.dart
+    │   └── mqtt_provider.dart
+    ├── screens
+    │   ├── alarm
+    │   │   ├── alarm_firing_screen.dart
+    │   │   ├── alarm_list_screen.dart
+    │   │   ├── alarm_set_screen.dart
+    │   │   └── widgets
+    │   │       ├── sound_selector_widget.dart
+    │   │       ├── time_picker_widget.dart
+    │   │       ├── volume_slider_widget.dart
+    │   │       └── weekday_picker_widget.dart
+    │   ├── home
+    │   │   └── home_screen.dart
+    │   └── scan
+    │       └── scan_screen.dart
+    └── widgets
+        ├── ble_error_banner.dart
+        ├── clock_face
+        │   ├── clock_face_widget.dart
+        │   └── light_hour_painter.dart
+        ├── light_hour_bar
+        │   └── light_hour_bar_widget.dart
+        ├── mqtt
+        │   ├── message_feed_widget.dart
+        │   └── mqtt_status_widget.dart
+        ├── scan
+        │   ├── device_list_tile.dart
+        │   └── scan_animation_widget.dart
+        ├── sensor
+        │   └── sensor_card_widget.dart
+        └── status_bar
+            ├── connection_status_dot.dart
+            └── status_bar_widget.dart
+
+28 directories, 64 files
+```
 
 ---
 
@@ -212,4 +319,4 @@ docs:     ドキュメント
 
 ## ライセンス
 
-This project is for portfolio / demonstration purposes.
+MIT
