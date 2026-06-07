@@ -1,1 +1,8 @@
-enum BleConnectionStatus { disconnected, scanning, connecting, connected, error, lost }
+enum BleConnectionStatus {
+  disconnected,
+  scanning,
+  connecting,
+  connected,
+  error,
+  lost,
+}

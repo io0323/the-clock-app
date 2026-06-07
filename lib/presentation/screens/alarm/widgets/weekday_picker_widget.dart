@@ -47,7 +47,9 @@ class WeekdayPickerWidget extends StatelessWidget {
               child: Text(
                 day.label,
                 style: AppTextStyles.bodyMedium.copyWith(
-                  color: isSelected ? AppColors.background : AppColors.textMuted,
+                  color: isSelected
+                      ? AppColors.background
+                      : AppColors.textMuted,
                   fontWeight: isSelected ? FontWeight.w500 : FontWeight.w300,
                 ),
               ),

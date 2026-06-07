@@ -39,12 +39,12 @@ class BleConnectionState {
   }) {
     return BleConnectionState(
       status: status ?? this.status,
-      connectedDevice:
-          clearDevice ? null : (connectedDevice ?? this.connectedDevice),
+      connectedDevice: clearDevice
+          ? null
+          : (connectedDevice ?? this.connectedDevice),
       retryCount: retryCount ?? this.retryCount,
       errorMessage: clearError ? null : (errorMessage ?? this.errorMessage),
-      connectedAt:
-          clearConnectedAt ? null : (connectedAt ?? this.connectedAt),
+      connectedAt: clearConnectedAt ? null : (connectedAt ?? this.connectedAt),
       rssi: clearRssi ? null : (rssi ?? this.rssi),
     );
   }

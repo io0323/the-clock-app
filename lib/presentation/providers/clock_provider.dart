@@ -14,13 +14,22 @@ final clockStateProvider = StreamProvider<ClockState>((ref) {
 });
 
 final currentTimeProvider = Provider<DateTime>((ref) {
-  return ref.watch(clockStateProvider).whenOrNull(data: (state) => state.currentTime) ?? DateTime.now();
+  return ref
+          .watch(clockStateProvider)
+          .whenOrNull(data: (state) => state.currentTime) ??
+      DateTime.now();
 });
 
 final lightHourProgressProvider = Provider<double>((ref) {
-  return ref.watch(clockStateProvider).whenOrNull(data: (state) => state.lightHourProgress) ?? 0.0;
+  return ref
+          .watch(clockStateProvider)
+          .whenOrNull(data: (state) => state.lightHourProgress) ??
+      0.0;
 });
 
 final bleStatusProvider = Provider<BleConnectionStatus>((ref) {
-  return ref.watch(clockStateProvider).whenOrNull(data: (state) => state.bleStatus) ?? BleConnectionStatus.disconnected;
+  return ref
+          .watch(clockStateProvider)
+          .whenOrNull(data: (state) => state.bleStatus) ??
+      BleConnectionStatus.disconnected;
 });

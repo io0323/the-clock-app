@@ -54,11 +54,11 @@ class AlarmFiringScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 48),
             Text(
-              'アラーム',
-              style: AppTextStyles.displayMedium.copyWith(
-                color: AppColors.amber,
-              ),
-            )
+                  'アラーム',
+                  style: AppTextStyles.displayMedium.copyWith(
+                    color: AppColors.amber,
+                  ),
+                )
                 .animate(onPlay: (c) => c.repeat())
                 .fadeIn(duration: 1200.ms)
                 .then()
@@ -109,24 +109,24 @@ class _PulseRing extends StatelessWidget {
       alignment: Alignment.center,
       children: [
         Container(
-          width: 220,
-          height: 220,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(color: AppColors.amberDim, width: 1),
-          ),
-        )
+              width: 220,
+              height: 220,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(color: AppColors.amberDim, width: 1),
+              ),
+            )
             .animate(onPlay: (c) => c.repeat())
             .scaleXY(begin: 0.9, end: 1.1, duration: 1500.ms)
             .fadeOut(begin: 0.6, duration: 1500.ms),
         Container(
-          width: 260,
-          height: 260,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(color: AppColors.amberDim, width: 0.5),
-          ),
-        )
+              width: 260,
+              height: 260,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(color: AppColors.amberDim, width: 0.5),
+              ),
+            )
             .animate(onPlay: (c) => c.repeat())
             .scaleXY(begin: 0.85, end: 1.15, duration: 2000.ms)
             .fadeOut(begin: 0.4, duration: 2000.ms),
@@ -159,9 +159,7 @@ class _ActionButton extends StatelessWidget {
         backgroundColor: color,
         foregroundColor: textColor,
         padding: const EdgeInsets.symmetric(vertical: 16),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,

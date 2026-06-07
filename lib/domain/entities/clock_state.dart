@@ -55,12 +55,12 @@ class ClockState {
 
   @override
   int get hashCode => Object.hash(
-        currentTime,
-        lightHourProgress,
-        bleStatus,
-        isAlarmActive,
-        alarmTime,
-        volume,
-        brightness,
-      );
+    currentTime,
+    lightHourProgress,
+    bleStatus,
+    isAlarmActive,
+    alarmTime,
+    volume,
+    brightness,
+  );
 }

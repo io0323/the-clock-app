@@ -32,37 +32,38 @@ void main() {
       };
 
       when(() => mockRepository.watchMessages()).thenAnswer(
-        (_) => Stream.value(MqttMessage(
-          topic: 'balmuda/test-device/shadow/get/accepted',
-          payload: shadowJson,
-          receivedAt: DateTime(2026),
-        )),
+        (_) => Stream.value(
+          MqttMessage(
+            topic: 'balmuda/test-device/shadow/get/accepted',
+            payload: shadowJson,
+            receivedAt: DateTime(2026),
+          ),
+        ),
       );
-      when(() => mockRepository.publish(any(), any()))
-          .thenAnswer((_) async {});
+      when(() => mockRepository.publish(any(), any())).thenAnswer((_) async {});
 
       final result = await useCase.call('test-device');
 
       expect(result.deviceId, 'test-device');
       expect(result.alarmActive, true);
-      verify(() => mockRepository.publish(
-            'balmuda/test-device/shadow/get',
-            {},
-          )).called(1);
+      verify(
+        () => mockRepository.publish('balmuda/test-device/shadow/get', {}),
+      ).called(1);
     });
 
     test('throws MqttTimeoutException when no response', () async {
       when(() => mockRepository.watchMessages()).thenAnswer(
         (_) => Stream.periodic(const Duration(hours: 1))
-            .map((_) => MqttMessage(
-                  topic: 'other',
-                  payload: {},
-                  receivedAt: DateTime(2026),
-                ))
+            .map(
+              (_) => MqttMessage(
+                topic: 'other',
+                payload: {},
+                receivedAt: DateTime(2026),
+              ),
+            )
             .where((_) => false),
       );
-      when(() => mockRepository.publish(any(), any()))
-          .thenAnswer((_) async {});
+      when(() => mockRepository.publish(any(), any())).thenAnswer((_) async {});
 
       await expectLater(
         useCase.call('test-device'),

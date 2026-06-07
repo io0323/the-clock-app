@@ -24,9 +24,7 @@ class BleErrorBanner extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       decoration: const BoxDecoration(
         color: AppColors.surface,
-        border: Border(
-          left: BorderSide(color: AppColors.error, width: 3),
-        ),
+        border: Border(left: BorderSide(color: AppColors.error, width: 3)),
       ),
       margin: const EdgeInsets.symmetric(horizontal: 16),
       child: Padding(

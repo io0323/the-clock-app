@@ -48,7 +48,9 @@ class SoundSelectorWidget extends ConsumerWidget {
                     color: AppColors.surface,
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
-                      color: isSelected ? AppColors.amber : AppColors.surfaceVariant,
+                      color: isSelected
+                          ? AppColors.amber
+                          : AppColors.surfaceVariant,
                       width: isSelected ? 2 : 1,
                     ),
                   ),
@@ -60,8 +62,9 @@ class SoundSelectorWidget extends ConsumerWidget {
                       if (isSelected)
                         Text(
                           entry.key,
-                          style: AppTextStyles.labelSmall
-                              .copyWith(color: AppColors.amber),
+                          style: AppTextStyles.labelSmall.copyWith(
+                            color: AppColors.amber,
+                          ),
                         ),
                     ],
                   ),

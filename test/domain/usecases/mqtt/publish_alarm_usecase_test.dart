@@ -16,8 +16,9 @@ void main() {
 
   group('PublishAlarmUseCase', () {
     test('publishes correct payload to alarm/set topic', () async {
-      when(() => mockRepository.publish(any(), any(), qos: any(named: 'qos')))
-          .thenAnswer((_) async {});
+      when(
+        () => mockRepository.publish(any(), any(), qos: any(named: 'qos')),
+      ).thenAnswer((_) async {});
 
       await useCase.call(
         deviceId: 'test-device',
@@ -26,15 +27,14 @@ void main() {
         volume: 0.6,
       );
 
-      verify(() => mockRepository.publish(
-            'balmuda/test-device/alarm/set',
-            {
-              'time': '07:30',
-              'sound': 'rain',
-              'volume': 0.6,
-              'active': true,
-            },
-          )).called(1);
+      verify(
+        () => mockRepository.publish('balmuda/test-device/alarm/set', {
+          'time': '07:30',
+          'sound': 'rain',
+          'volume': 0.6,
+          'active': true,
+        }),
+      ).called(1);
     });
   });
 }

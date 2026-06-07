@@ -46,8 +46,9 @@ final connectMqttUseCaseProvider = Provider<ConnectMqttUseCase>((ref) {
   );
 });
 
-final syncDeviceShadowUseCaseProvider =
-    Provider<SyncDeviceShadowUseCase>((ref) {
+final syncDeviceShadowUseCaseProvider = Provider<SyncDeviceShadowUseCase>((
+  ref,
+) {
   return SyncDeviceShadowUseCase(ref.watch(mqttRepositoryProvider));
 });
 
@@ -71,17 +72,18 @@ final sensorDataProvider = StreamProvider<SensorData>((ref) {
   return useCase.call(_defaultDeviceId);
 });
 
-final mqttConnectionStatusProvider =
-    StreamProvider<MqttConnectionStatus>((ref) {
+final mqttConnectionStatusProvider = StreamProvider<MqttConnectionStatus>((
+  ref,
+) {
   final repository = ref.watch(mqttRepositoryProvider);
   return repository.watchConnectionStatus();
 });
 
 final recentMqttMessagesProvider =
     StateNotifierProvider<RecentMessagesNotifier, List<MqttMessage>>((ref) {
-  final repository = ref.watch(mqttRepositoryProvider);
-  return RecentMessagesNotifier(repository);
-});
+      final repository = ref.watch(mqttRepositoryProvider);
+      return RecentMessagesNotifier(repository);
+    });
 
 class RecentMessagesNotifier extends StateNotifier<List<MqttMessage>> {
   RecentMessagesNotifier(this._repository) : super(const []) {

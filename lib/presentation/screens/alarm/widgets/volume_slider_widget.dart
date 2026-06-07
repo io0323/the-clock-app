@@ -24,7 +24,9 @@ class VolumeSliderWidget extends ConsumerWidget {
               Text('ボリューム', style: AppTextStyles.labelSmall),
               Text(
                 '${volume.round()}%',
-                style: AppTextStyles.labelSmall.copyWith(color: AppColors.amber),
+                style: AppTextStyles.labelSmall.copyWith(
+                  color: AppColors.amber,
+                ),
               ),
             ],
           ),

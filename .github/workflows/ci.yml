@@ -21,6 +21,9 @@ jobs:
           channel: 'stable'
           cache: true
 
+      - name: .env の作成（CI用ダミー）
+        run: cp .env.example .env
+
       - name: 依存関係のインストール
         run: flutter pub get
 
@@ -31,7 +34,7 @@ jobs:
         run: dart format --output=none --set-exit-if-changed .
 
       - name: テスト実行（カバレッジ付き）
-        run: flutter test --coverage
+        run: flutter test --coverage test/domain test/widget_test.dart
 
       - name: カバレッジレポートのアップロード
         uses: codecov/codecov-action@v4

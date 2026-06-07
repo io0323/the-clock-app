@@ -36,8 +36,9 @@ void main() {
       discoveredAt: DateTime(2026),
     );
 
-    when(() => mockRepository.watchConnectionState())
-        .thenAnswer((_) => stateController.stream);
+    when(
+      () => mockRepository.watchConnectionState(),
+    ).thenAnswer((_) => stateController.stream);
   });
 
   tearDown(() {
@@ -48,36 +49,39 @@ void main() {
   group('AutoReconnectUseCase', () {
     test('starts reconnection when connection is lost', () {
       fakeAsync((async) {
-        when(() => mockRepository.connect(any(), timeout: any(named: 'timeout')))
-            .thenAnswer((_) async {});
+        when(
+          () => mockRepository.connect(any(), timeout: any(named: 'timeout')),
+        ).thenAnswer((_) async {});
 
         useCase.start(device);
 
-        stateController.add(const BleConnectionState(
-          status: BleConnectionStatus.lost,
-        ));
+        stateController.add(
+          const BleConnectionState(status: BleConnectionStatus.lost),
+        );
 
         async.elapse(const Duration(seconds: 2));
 
-        verify(() => mockRepository.connect(any(), timeout: any(named: 'timeout')))
-            .called(greaterThanOrEqualTo(1));
+        verify(
+          () => mockRepository.connect(any(), timeout: any(named: 'timeout')),
+        ).called(greaterThanOrEqualTo(1));
       });
     });
 
     test('stops after maxRetries failures', () {
       fakeAsync((async) {
         var connectCount = 0;
-        when(() => mockRepository.connect(any(), timeout: any(named: 'timeout')))
-            .thenAnswer((_) async {
+        when(
+          () => mockRepository.connect(any(), timeout: any(named: 'timeout')),
+        ).thenAnswer((_) async {
           connectCount++;
           throw Exception('Connection failed');
         });
 
         useCase.start(device);
 
-        stateController.add(const BleConnectionState(
-          status: BleConnectionStatus.error,
-        ));
+        stateController.add(
+          const BleConnectionState(status: BleConnectionStatus.error),
+        );
 
         async.elapse(const Duration(seconds: 120));
 
@@ -88,17 +92,18 @@ void main() {
     test('cancels reconnection on manual disconnect', () {
       fakeAsync((async) {
         var connectCount = 0;
-        when(() => mockRepository.connect(any(), timeout: any(named: 'timeout')))
-            .thenAnswer((_) async {
+        when(
+          () => mockRepository.connect(any(), timeout: any(named: 'timeout')),
+        ).thenAnswer((_) async {
           connectCount++;
           throw Exception('Connection failed');
         });
 
         useCase.start(device);
 
-        stateController.add(const BleConnectionState(
-          status: BleConnectionStatus.lost,
-        ));
+        stateController.add(
+          const BleConnectionState(status: BleConnectionStatus.lost),
+        );
 
         async.elapse(const Duration(seconds: 2));
         useCase.cancel();

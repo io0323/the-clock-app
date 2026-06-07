@@ -33,8 +33,7 @@ void main() {
           callCount++;
           if (callCount < 3) throw Exception('Connection failed');
         });
-        when(() => mockRepository.subscribeAll(any()))
-            .thenAnswer((_) async {});
+        when(() => mockRepository.subscribeAll(any())).thenAnswer((_) async {});
 
         var completed = false;
         useCase.call().then((_) => completed = true);
@@ -49,8 +48,9 @@ void main() {
 
     test('throws after exceeding max retries', () {
       fakeAsync((async) {
-        when(() => mockRepository.connect())
-            .thenThrow(Exception('Connection failed'));
+        when(
+          () => mockRepository.connect(),
+        ).thenThrow(Exception('Connection failed'));
 
         Object? caughtError;
         useCase.call().catchError((Object e) {

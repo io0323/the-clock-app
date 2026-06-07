@@ -30,7 +30,8 @@ class HomeScreen extends ConsumerWidget {
     final bleState = ref.watch(bleConnectionStateProvider);
     final status = bleState.valueOrNull?.status;
     final errorMessage = bleState.valueOrNull?.errorMessage;
-    final hasError = status == BleConnectionStatus.error ||
+    final hasError =
+        status == BleConnectionStatus.error ||
         status == BleConnectionStatus.lost;
 
     return Scaffold(
@@ -39,96 +40,97 @@ class HomeScreen extends ConsumerWidget {
           children: [
             SingleChildScrollView(
               child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const SizedBox(height: 24),
-                Text(
-                  'The Clock',
-                  style: AppTextStyles.displayMedium,
-                  textAlign: TextAlign.center,
-                ),
-                Text(
-                  'io0323 Connect',
-                  style: AppTextStyles.labelSmall.copyWith(
-                    color: AppColors.textMuted,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const SizedBox(height: 24),
+                  Text(
+                    'The Clock',
+                    style: AppTextStyles.displayMedium,
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 48),
-                const ClockFaceWidget(),
-                const SizedBox(height: 16),
-                const LightHourBarWidget(),
-                const SizedBox(height: 8),
-                const _TimeTextWidget(),
-                const SizedBox(height: 32),
-                const StatusBarWidget(),
-                const SizedBox(height: 8),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute<void>(
-                            builder: (_) => const AlarmListScreen(),
+                  Text(
+                    'io0323 Connect',
+                    style: AppTextStyles.labelSmall.copyWith(
+                      color: AppColors.textMuted,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 48),
+                  const ClockFaceWidget(),
+                  const SizedBox(height: 16),
+                  const LightHourBarWidget(),
+                  const SizedBox(height: 8),
+                  const _TimeTextWidget(),
+                  const SizedBox(height: 32),
+                  const StatusBarWidget(),
+                  const SizedBox(height: 8),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute<void>(
+                              builder: (_) => const AlarmListScreen(),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          'アラーム一覧',
+                          style: AppTextStyles.labelSmall.copyWith(
+                            color: AppColors.amber,
                           ),
-                        );
-                      },
-                      child: Text(
-                        'アラーム一覧',
-                        style: AppTextStyles.labelSmall.copyWith(
-                          color: AppColors.amber,
                         ),
                       ),
-                    ),
-                    const SizedBox(width: 16),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute<void>(
-                            builder: (_) => const AlarmSetScreen(),
-                          ),
-                        );
-                      },
-                      child: Text(
-                        'アラームを設定',
-                        style: AppTextStyles.labelSmall.copyWith(
-                          color: AppColors.amber,
-                        ),
-                      ),
-                    ),
-                    if (kDebugMode) ...[
                       const SizedBox(width: 16),
                       TextButton(
                         onPressed: () {
                           Navigator.of(context).push(
                             MaterialPageRoute<void>(
-                              builder: (_) => AlarmFiringScreen(
-                                event: DemoData.triggerEvent,
-                              ),
+                              builder: (_) => const AlarmSetScreen(),
                             ),
                           );
                         },
                         child: Text(
-                          'アラーム発火',
+                          'アラームを設定',
                           style: AppTextStyles.labelSmall.copyWith(
-                            color: AppColors.error,
+                            color: AppColors.amber,
                           ),
                         ),
                       ),
+                      if (kDebugMode) ...[
+                        const SizedBox(width: 16),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute<void>(
+                                builder: (_) => AlarmFiringScreen(
+                                  event: DemoData.triggerEvent,
+                                ),
+                              ),
+                            );
+                          },
+                          child: Text(
+                            'アラーム発火',
+                            style: AppTextStyles.labelSmall.copyWith(
+                              color: AppColors.error,
+                            ),
+                          ),
+                        ),
+                      ],
                     ],
-                  ],
-                ),
-                const SizedBox(height: 16),
-                if (ref.watch(sensorDataProvider).hasValue)
-                  const SensorCardWidget(),
-                if (kDebugMode) ...[
+                  ),
                   const SizedBox(height: 16),
-                  const MessageFeedWidget(),
+                  if (ref.watch(sensorDataProvider).hasValue)
+                    const SensorCardWidget(),
+                  if (kDebugMode) ...[
+                    const SizedBox(height: 16),
+                    const MessageFeedWidget(),
+                  ],
+                  const SizedBox(height: 24),
                 ],
-                const SizedBox(height: 24),
-              ],
-            )),
+              ),
+            ),
             Positioned(
               top: 0,
               left: 0,
@@ -165,9 +167,7 @@ class _TimeTextWidget extends ConsumerWidget {
         Center(
           child: Text(
             timeString,
-            style: AppTextStyles.timeDisplay.copyWith(
-              color: AppColors.amber,
-            ),
+            style: AppTextStyles.timeDisplay.copyWith(color: AppColors.amber),
           ),
         ),
         Center(
