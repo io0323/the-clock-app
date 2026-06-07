@@ -1,57 +1,178 @@
-# The Clock App
+# The Clock App — BALMUDA Connect 再設計
 
-BALMUDA「The Clock」をモチーフにした Flutter アプリケーションです。  
-BLE、MQTT、クラウド連携を前提に、再設計プロトタイプとして開発を進めるプロジェクトです。
+> BALMUDA「The Clock」向け Flutter ポートフォリオアプリ。
+> BLE通信・MQTT/クラウド連携・非同期状態管理を横断した設計が中核。
 
-## Overview
+## スクリーンショット
 
-このリポジトリでは、The Clock 向けモバイルアプリを Flutter で構築します。  
-主なテーマは以下です。
+| ホーム画面 | アラーム一覧 | アラーム編集 | 発火画面 |
+|:---------:|:-----------:|:-----------:|:-------:|
+| ![home](docs/screenshots/home.png) | ![alarm_list](docs/screenshots/alarm_list.png) | ![alarm_edit](docs/screenshots/alarm_edit.png) | ![firing](docs/screenshots/firing.png) |
 
-- BLE 接続とデバイス制御
-- MQTT を用いたリアルタイム連携
-- REST API / クラウド連携
-- Riverpod を用いた非同期状態管理
-- Clean Architecture による責務分離
+---
 
-## Architecture
+## 技術スタック
 
-本プロジェクトは以下の原則に従って設計します。
+| カテゴリ | 技術 |
+|---------|------|
+| フレームワーク | Flutter 3.x / Dart 3.x |
+| 状態管理 | Riverpod 2.x（StateNotifier / StreamProvider） |
+| BLE通信 | flutter_blue_plus |
+| クラウド連携 | MQTT（mqtt_client）/ REST API（Dio + Retrofit） |
+| 通知 | flutter_local_notifications |
+| 永続化 | SharedPreferences |
+| テスト | flutter_test / mocktail |
+| CI | GitHub Actions |
 
-- Clean Architecture
-- Riverpod による状態管理
-- BLE / API / MQTT を独立した Repository として分離
-- UI からビジネスロジックを直接呼び出さない
+---
 
-## Directory Structure
+## アーキテクチャ
+
+Clean Architecture（3層分離）を採用しています。
+
+```
+┌─────────────────────────────────────────────────────┐
+│                  Presentation                       │
+│   Screens ─── Widgets ─── Riverpod Providers        │
+├─────────────────────────────────────────────────────┤
+│                    Domain                           │
+│   Entities ─── UseCases ─── Repository Interfaces   │
+├─────────────────────────────────────────────────────┤
+│                     Data                            │
+│   Repository Impl ─── DataSources (BLE/MQTT/REST)   │
+└─────────────────────────────────────────────────────┘
+```
+
+**依存方向**: Presentation → Domain ← Data（Domain は外部に依存しない）
+
+### ディレクトリ構成
 
 ```text
 lib/
-├── core/           # 共通ユーティリティ・定数・例外定義
-├── domain/         # Entity / UseCase / Repository interface
-├── data/           # Repository implementation / data sources
-└── presentation/   # Screen / Widget / Riverpod providers
+├── core/                   # 共通ユーティリティ・定数・例外定義
+│   ├── constants/          #   AppColors, AppTextStyles, AppTheme, MqttTopics
+│   ├── errors/             #   AppException, BleException, MqttException, AlarmException
+│   └── utils/              #   BleLogger, DemoData
+│
+├── domain/                 # ビジネスロジック層
+│   ├── entities/           #   ClockState, BleDevice, SensorData, AlarmConfig 等
+│   ├── repositories/       #   BleRepository, MqttRepository, ClockRepository（interface）
+│   └── usecases/
+│       ├── ble/            #   ScanDevices, ConnectDevice, AutoReconnect
+│       └── mqtt/           #   WatchSensor, ConnectMqtt, SyncDeviceShadow, PublishAlarm
+│
+├── data/                   # データアクセス層
+│   ├── datasources/        #   BleDataSource, MqttDataSource, RestDataSource
+│   └── repositories/       #   BleRepositoryImpl, MqttRepositoryImpl, MockClockRepository
+│
+├── presentation/           # UI 層
+│   ├── providers/          #   ble_provider, mqtt_provider, clock_provider, ble_lifecycle_provider
+│   ├── screens/            #   home/, scan/, alarm/
+│   └── widgets/            #   clock_face/, light_hour_bar/, mqtt/, sensor/, status_bar/
+│
+└── main.dart
+```
 
-Development
-Requirements
-Flutter SDK
-Dart SDK
-Xcode / Android Studio
-実機 BLE テスト環境
-Install dependencies
+---
+
+## 設計の要点
+
+### BLE 接続フロー
+
+```
+Scan → Select → Connect → Authenticate → Ready
+          ↓ 切断検知
+   指数バックオフ再接続（1s → 2s → 4s → max 30s）
+```
+
+- `BleRepository`（interface）→ `BleRepositoryImpl`（実装）で責務を分離
+- 接続状態は `StateNotifierProvider` で一元管理し、UI は `ref.watch()` で反映
+- 全 BLE 操作を `try/catch (BleException)` でラップし、エラーを統一的にハンドリング
+
+### MQTT リアルタイム同期
+
+```
+Device ──publish──▶ Broker ──subscribe──▶ App
+App    ──publish──▶ Broker ──subscribe──▶ Device
+```
+
+- `StreamProvider` で MQTT メッセージを購読し、センサーデータをリアルタイム反映
+- Device Shadow パターンでオフライン時の状態差分を同期
+- トピック設計は `core/constants/mqtt_topics.dart` に集約
+
+### アラーム管理
+
+- Domain Entity（`AlarmConfig`）→ UseCase（`PublishAlarmUsecase`）→ MQTT publish の流れ
+- アラーム発火時のバイブレーション・サウンドは OS ネイティブ通知と連携
+
+---
+
+## セットアップ
+
+```bash
+# 依存パッケージのインストール
 flutter pub get
-Run app
+
+# コード生成（Riverpod Generator / Retrofit）
+dart run build_runner build --delete-conflicting-outputs
+
+# アプリ起動
 flutter run
-Run tests
+
+# テスト実行
 flutter test
-Notes
-BLE テストは実機前提
-MQTT 接続はローカル Broker または検証環境を利用
-コミットは Conventional Commits を利用
-Roadmap
- Clean Architecture の土台構築
- Riverpod 導入
- BLE 接続フロー実装
- MQTT 連携
- クラウド API 連携
- デバイス状態同期 UI の実装
+```
+
+### 前提条件
+
+- Flutter SDK 3.x / Dart SDK 3.x
+- Xcode（iOS）/ Android Studio（Android）
+- BLE テストは実機が必要（エミュレータ不可）
+- MQTT 接続にはローカル Broker（`localhost:1883`）または検証環境を使用
+
+---
+
+## テスト方針
+
+| レイヤー | テスト手法 | ツール |
+|---------|-----------|-------|
+| Domain（UseCase） | ユニットテスト | flutter_test / mocktail |
+| Data（Repository） | ユニットテスト + Mock | mocktail |
+| BLE / MQTT 結合 | 統合テスト（実機） | flutter_test |
+| Presentation | Widget テスト | flutter_test |
+
+---
+
+## コミット規約
+
+[Conventional Commits](https://www.conventionalcommits.org/) に準拠しています。
+
+```
+feat:     新機能
+fix:      バグ修正
+refactor: リファクタリング
+test:     テスト追加・修正
+docs:     ドキュメント
+```
+
+---
+
+## ロードマップ
+
+- [x] Clean Architecture の土台構築
+- [x] Riverpod 導入・Provider 設計
+- [x] BLE 接続フロー実装（スキャン → 接続 → ライフサイクル管理）
+- [x] MQTT 連携（リアルタイム同期・センサーデータ購読）
+- [x] REST API 連携（Dio + Retrofit）
+- [x] アラーム管理（ドメイン設計 → MQTT publish）
+- [x] アプリアイコン・スプラッシュ画面
+- [ ] flutter_local_notifications によるアラーム発火
+- [ ] SharedPreferences によるアラーム永続化
+- [ ] GitHub Actions CI パイプライン
+- [ ] E2E テスト整備
+
+---
+
+## ライセンス
+
+This project is for portfolio / demonstration purposes.
