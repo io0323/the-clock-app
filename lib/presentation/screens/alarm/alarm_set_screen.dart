@@ -30,7 +30,9 @@ class _AlarmSetScreenState extends ConsumerState<AlarmSetScreen> {
         '${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
 
     try {
-      await ref.read(publishAlarmUseCaseProvider).call(
+      await ref
+          .read(publishAlarmUseCaseProvider)
+          .call(
             deviceId: 'default',
             time: time,
             sound: sound,
@@ -38,20 +40,20 @@ class _AlarmSetScreenState extends ConsumerState<AlarmSetScreen> {
           );
       ref.invalidate(deviceShadowProvider);
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('アラームを設定しました')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('アラームを設定しました')));
       Navigator.of(context).pop();
     } on MqttSpecificException catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.userMessage)),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(e.userMessage)));
     } catch (_) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('送信に失敗しました')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('送信に失敗しました')));
     } finally {
       if (mounted) setState(() => _isSending = false);
     }
@@ -83,8 +85,9 @@ class _AlarmSetScreenState extends ConsumerState<AlarmSetScreen> {
                           : () => Navigator.of(context).pop(),
                       child: Text(
                         'キャンセル',
-                        style: AppTextStyles.bodyMedium
-                            .copyWith(color: AppColors.textMuted),
+                        style: AppTextStyles.bodyMedium.copyWith(
+                          color: AppColors.textMuted,
+                        ),
                       ),
                     ),
                   ),
@@ -109,11 +112,13 @@ class _AlarmSetScreenState extends ConsumerState<AlarmSetScreen> {
                                 color: AppColors.background,
                               ),
                             )
-                          : Text('設定を送信',
+                          : Text(
+                              '設定を送信',
                               style: AppTextStyles.bodyMedium.copyWith(
                                 color: AppColors.background,
                                 fontWeight: FontWeight.w500,
-                              )),
+                              ),
+                            ),
                     ),
                   ),
                 ],

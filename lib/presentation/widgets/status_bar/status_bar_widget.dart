@@ -13,21 +13,23 @@ class StatusBarWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final bleState = ref.watch(bleConnectionStateProvider);
-    final bleStatus = bleState.whenOrNull(data: (s) => s.status)
-        ?? BleConnectionStatus.disconnected;
+    final bleStatus =
+        bleState.whenOrNull(data: (s) => s.status) ??
+        BleConnectionStatus.disconnected;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         GestureDetector(
           onTap: () {
-            Navigator.of(context).push(
-              MaterialPageRoute<void>(
-                builder: (_) => const ScanScreen(),
-              ),
-            );
+            Navigator.of(
+              context,
+            ).push(MaterialPageRoute<void>(builder: (_) => const ScanScreen()));
           },
-          child: _StatusItem(label: 'BLE', child: ConnectionStatusDot(status: bleStatus)),
+          child: _StatusItem(
+            label: 'BLE',
+            child: ConnectionStatusDot(status: bleStatus),
+          ),
         ),
         _StatusItem(
           label: 'Wi-Fi',
@@ -54,9 +56,9 @@ class _StatusItem extends StatelessWidget {
         const SizedBox(height: 4),
         Text(
           label,
-          style: Theme.of(context).textTheme.labelSmall?.copyWith(
-            color: AppColors.textMuted,
-          ),
+          style: Theme.of(
+            context,
+          ).textTheme.labelSmall?.copyWith(color: AppColors.textMuted),
         ),
       ],
     );

@@ -20,9 +20,12 @@ class SyncDeviceShadowUseCase {
         .where((msg) => msg.topic == topics.shadow)
         .map((msg) => DeviceShadow.fromJson(msg.payload))
         .first
-        .timeout(_timeout, onTimeout: () {
-      throw const MqttTimeoutException(timeoutSec: 5);
-    });
+        .timeout(
+          _timeout,
+          onTimeout: () {
+            throw const MqttTimeoutException(timeoutSec: 5);
+          },
+        );
 
     await _repository.publish(topics.shadowGet, {});
 

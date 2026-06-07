@@ -8,8 +8,10 @@ sealed class MqttSpecificException extends MqttException {
 
 class MqttConnectionException extends MqttSpecificException {
   const MqttConnectionException({String? message})
-      : super(message ?? 'MQTT broker connection failed',
-            code: 'MQTT_CONNECTION');
+    : super(
+        message ?? 'MQTT broker connection failed',
+        code: 'MQTT_CONNECTION',
+      );
 
   @override
   String get userMessage => 'サーバーへの接続に失敗しました。ネットワーク設定を確認してください。';
@@ -17,7 +19,7 @@ class MqttConnectionException extends MqttSpecificException {
 
 class MqttAuthException extends MqttSpecificException {
   const MqttAuthException({String? message})
-      : super(message ?? 'MQTT authentication failed', code: 'MQTT_AUTH');
+    : super(message ?? 'MQTT authentication failed', code: 'MQTT_AUTH');
 
   @override
   String get userMessage => '認証に失敗しました。証明書またはクレデンシャルを確認してください。';
@@ -25,7 +27,7 @@ class MqttAuthException extends MqttSpecificException {
 
 class MqttPublishException extends MqttSpecificException {
   const MqttPublishException({String? message})
-      : super(message ?? 'MQTT publish failed', code: 'MQTT_PUBLISH');
+    : super(message ?? 'MQTT publish failed', code: 'MQTT_PUBLISH');
 
   @override
   String get userMessage => 'メッセージの送信に失敗しました。接続状態を確認してください。';
@@ -33,7 +35,7 @@ class MqttPublishException extends MqttSpecificException {
 
 class MqttSubscribeException extends MqttSpecificException {
   const MqttSubscribeException({String? message})
-      : super(message ?? 'MQTT subscribe failed', code: 'MQTT_SUBSCRIBE');
+    : super(message ?? 'MQTT subscribe failed', code: 'MQTT_SUBSCRIBE');
 
   @override
   String get userMessage => 'トピックの購読に失敗しました。再接続してください。';
@@ -41,7 +43,7 @@ class MqttSubscribeException extends MqttSpecificException {
 
 class MqttTimeoutException extends MqttSpecificException {
   const MqttTimeoutException({this.timeoutSec = 10, String? message})
-      : super(message ?? 'MQTT response timed out', code: 'MQTT_TIMEOUT');
+    : super(message ?? 'MQTT response timed out', code: 'MQTT_TIMEOUT');
 
   final int timeoutSec;
 
@@ -51,7 +53,7 @@ class MqttTimeoutException extends MqttSpecificException {
 
 class MqttUnknownException extends MqttSpecificException {
   const MqttUnknownException({this.cause, String? message})
-      : super(message ?? 'Unknown MQTT error', code: 'MQTT_UNKNOWN');
+    : super(message ?? 'Unknown MQTT error', code: 'MQTT_UNKNOWN');
 
   final Object? cause;
 

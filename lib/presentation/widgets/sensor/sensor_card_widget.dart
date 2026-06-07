@@ -26,10 +26,7 @@ class SensorCardWidget extends ConsumerWidget {
           humidity: '${data.humidity}%',
         ),
         loading: () => const _ShimmerRow(),
-        error: (_, __) => const _SensorRow(
-          temperature: '--',
-          humidity: '--',
-        ),
+        error: (_, __) => const _SensorRow(temperature: '--', humidity: '--'),
       ),
     );
   }
@@ -74,16 +71,11 @@ class _SensorColumn extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(
-          value,
-          style: AppTextStyles.timeDisplay.copyWith(fontSize: 20),
-        ),
+        Text(value, style: AppTextStyles.timeDisplay.copyWith(fontSize: 20)),
         const SizedBox(height: 2),
         Text(
           label,
-          style: AppTextStyles.labelSmall.copyWith(
-            color: AppColors.textDim,
-          ),
+          style: AppTextStyles.labelSmall.copyWith(color: AppColors.textDim),
         ),
       ],
     );

@@ -37,16 +37,25 @@ class _ConnectionStatusDotState extends State<ConnectionStatusDot>
       case BleConnectionStatus.connected:
       case BleConnectionStatus.scanning:
         _controller.duration = const Duration(milliseconds: 2000);
-        _animation = CurvedAnimation(parent: _controller, curve: Curves.easeInOut);
+        _animation = CurvedAnimation(
+          parent: _controller,
+          curve: Curves.easeInOut,
+        );
         _controller.repeat(reverse: true);
       case BleConnectionStatus.connecting:
         _controller.duration = const Duration(milliseconds: 800);
-        _animation = CurvedAnimation(parent: _controller, curve: Curves.easeInOut);
+        _animation = CurvedAnimation(
+          parent: _controller,
+          curve: Curves.easeInOut,
+        );
         _controller.repeat(reverse: true);
       case BleConnectionStatus.error:
       case BleConnectionStatus.lost:
         _controller.duration = const Duration(milliseconds: 600);
-        _animation = CurvedAnimation(parent: _controller, curve: Curves.easeInOut);
+        _animation = CurvedAnimation(
+          parent: _controller,
+          curve: Curves.easeInOut,
+        );
         _controller.repeat(reverse: true);
       case BleConnectionStatus.disconnected:
         _animation = const AlwaysStoppedAnimation(1.0);

@@ -62,19 +62,25 @@ class _MqttDotState extends State<_MqttDot>
     switch (widget.status) {
       case MqttConnectionStatus.connected:
         _controller.duration = const Duration(milliseconds: 2000);
-        _animation =
-            CurvedAnimation(parent: _controller, curve: Curves.easeInOut);
+        _animation = CurvedAnimation(
+          parent: _controller,
+          curve: Curves.easeInOut,
+        );
         _controller.repeat(reverse: true);
       case MqttConnectionStatus.connecting:
       case MqttConnectionStatus.reconnecting:
         _controller.duration = const Duration(milliseconds: 800);
-        _animation =
-            CurvedAnimation(parent: _controller, curve: Curves.easeInOut);
+        _animation = CurvedAnimation(
+          parent: _controller,
+          curve: Curves.easeInOut,
+        );
         _controller.repeat(reverse: true);
       case MqttConnectionStatus.error:
         _controller.duration = const Duration(milliseconds: 600);
-        _animation =
-            CurvedAnimation(parent: _controller, curve: Curves.easeInOut);
+        _animation = CurvedAnimation(
+          parent: _controller,
+          curve: Curves.easeInOut,
+        );
         _controller.repeat(reverse: true);
       case MqttConnectionStatus.disconnected:
         _animation = const AlwaysStoppedAnimation(1.0);
@@ -88,12 +94,12 @@ class _MqttDotState extends State<_MqttDot>
   }
 
   Color get _color => switch (widget.status) {
-        MqttConnectionStatus.connected => AppColors.success,
-        MqttConnectionStatus.connecting => AppColors.amber,
-        MqttConnectionStatus.reconnecting => AppColors.amber,
-        MqttConnectionStatus.error => AppColors.error,
-        MqttConnectionStatus.disconnected => AppColors.textDim,
-      };
+    MqttConnectionStatus.connected => AppColors.success,
+    MqttConnectionStatus.connecting => AppColors.amber,
+    MqttConnectionStatus.reconnecting => AppColors.amber,
+    MqttConnectionStatus.error => AppColors.error,
+    MqttConnectionStatus.disconnected => AppColors.textDim,
+  };
 
   @override
   Widget build(BuildContext context) {

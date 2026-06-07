@@ -27,7 +27,9 @@ class _EmptyMessagesNotifier extends StateNotifier<List<MqttMessage>>
 }
 
 void main() {
-  testWidgets('HomeScreen renders title and clock', (WidgetTester tester) async {
+  testWidgets('HomeScreen renders title and clock', (
+    WidgetTester tester,
+  ) async {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
@@ -35,9 +37,7 @@ void main() {
           bleConnectionStateProvider.overrideWith(
             (ref) => Stream.value(BleConnectionState.initial),
           ),
-          bleLifecycleProvider.overrideWithValue(
-            _NoopBleLifecycleObserver(),
-          ),
+          bleLifecycleProvider.overrideWithValue(_NoopBleLifecycleObserver()),
           mqttConnectionStatusProvider.overrideWith(
             (ref) => Stream.value(MqttConnectionStatus.disconnected),
           ),
@@ -46,10 +46,7 @@ void main() {
             (ref) => _EmptyMessagesNotifier(),
           ),
         ],
-        child: MaterialApp(
-          theme: AppTheme.dark,
-          home: const HomeScreen(),
-        ),
+        child: MaterialApp(theme: AppTheme.dark, home: const HomeScreen()),
       ),
     );
 

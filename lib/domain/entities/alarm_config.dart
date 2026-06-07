@@ -57,7 +57,8 @@ class AlarmConfig {
       id: json['id'] as String,
       active: json['active'] as bool,
       time: json['time'] as String,
-      weekdays: (json['weekdays'] as List<dynamic>?)
+      weekdays:
+          (json['weekdays'] as List<dynamic>?)
               ?.map((e) => AlarmWeekday.values.byName(e as String))
               .toList() ??
           const [],

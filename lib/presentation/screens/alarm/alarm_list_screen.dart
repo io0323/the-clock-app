@@ -136,23 +136,12 @@ class _AlarmCard extends ConsumerWidget {
                   children: [
                     _WeekdayIndicator(alarm: alarm),
                     const SizedBox(width: 12),
-                    Icon(
-                      Icons.music_note,
-                      size: 14,
-                      color: AppColors.textDim,
-                    ),
+                    Icon(Icons.music_note, size: 14, color: AppColors.textDim),
                     const SizedBox(width: 4),
-                    Text(
-                      alarm.sound.label,
-                      style: AppTextStyles.labelSmall,
-                    ),
+                    Text(alarm.sound.label, style: AppTextStyles.labelSmall),
                     if (alarm.snoozeEnabled) ...[
                       const SizedBox(width: 12),
-                      Icon(
-                        Icons.snooze,
-                        size: 14,
-                        color: AppColors.textDim,
-                      ),
+                      Icon(Icons.snooze, size: 14, color: AppColors.textDim),
                       const SizedBox(width: 4),
                       Text(
                         '${alarm.snoozeMinutes}分',

@@ -14,14 +14,11 @@ class PublishAlarmUseCase {
   }) async {
     final topics = MqttTopics(deviceId);
 
-    await _repository.publish(
-      topics.alarmSet,
-      {
-        'time': time,
-        'sound': sound,
-        'volume': volume,
-        'active': true,
-      },
-    );
+    await _repository.publish(topics.alarmSet, {
+      'time': time,
+      'sound': sound,
+      'volume': volume,
+      'active': true,
+    });
   }
 }

@@ -42,12 +42,12 @@ class MqttDataSource {
 
   late final MqttServerClient _client;
 
-  final _statusController =
-      StreamController<MqttConnectionStatus>.broadcast();
+  final _statusController = StreamController<MqttConnectionStatus>.broadcast();
   final _messagesController = StreamController<domain.MqttMessage>.broadcast();
 
   List<String> _subscribedTopics = [];
-  StreamSubscription<List<MqttReceivedMessage<MqttMessage?>>>? _updatesSubscription;
+  StreamSubscription<List<MqttReceivedMessage<MqttMessage?>>>?
+  _updatesSubscription;
 
   Future<void> connect() async {
     _statusController.add(MqttConnectionStatus.connecting);
@@ -103,11 +103,7 @@ class MqttDataSource {
     try {
       final builder = MqttClientPayloadBuilder()
         ..addString(jsonEncode(payload));
-      _client.publishMessage(
-        topic,
-        _toMqttQos(qos),
-        builder.payload!,
-      );
+      _client.publishMessage(topic, _toMqttQos(qos), builder.payload!);
     } on Exception catch (e) {
       throw MqttPublishException(message: e.toString());
     }
@@ -122,8 +118,9 @@ class MqttDataSource {
 
   void _listenToUpdates() {
     _updatesSubscription?.cancel();
-    _updatesSubscription = _client.updates
-        ?.listen((List<MqttReceivedMessage<MqttMessage?>> messages) {
+    _updatesSubscription = _client.updates?.listen((
+      List<MqttReceivedMessage<MqttMessage?>> messages,
+    ) {
       for (final msg in messages) {
         final pubMsg = msg.payload as MqttPublishMessage;
         final payloadStr = MqttPublishPayload.bytesToStringAsString(
@@ -131,15 +128,16 @@ class MqttDataSource {
         );
 
         try {
-          final json =
-              jsonDecode(payloadStr) as Map<String, dynamic>;
-          _messagesController.add(domain.MqttMessage(
-            topic: msg.topic,
-            payload: json,
-            receivedAt: DateTime.now(),
-            qos: pubMsg.header?.qos.index ?? 0,
-            retained: pubMsg.header?.retain ?? false,
-          ));
+          final json = jsonDecode(payloadStr) as Map<String, dynamic>;
+          _messagesController.add(
+            domain.MqttMessage(
+              topic: msg.topic,
+              payload: json,
+              receivedAt: DateTime.now(),
+              qos: pubMsg.header?.qos.index ?? 0,
+              retained: pubMsg.header?.retain ?? false,
+            ),
+          );
         } on FormatException catch (e) {
           debugPrint('MQTT JSON parse error on ${msg.topic}: $e');
         }
@@ -170,8 +168,8 @@ class MqttDataSource {
   }
 
   MqttQos _toMqttQos(int qos) => switch (qos) {
-        0 => MqttQos.atMostOnce,
-        2 => MqttQos.exactlyOnce,
-        _ => MqttQos.atLeastOnce,
-      };
+    0 => MqttQos.atMostOnce,
+    2 => MqttQos.exactlyOnce,
+    _ => MqttQos.atLeastOnce,
+  };
 }

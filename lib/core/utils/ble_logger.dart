@@ -27,14 +27,18 @@ abstract final class BleLogger {
 
   static void deviceFound(BleDevice device) {
     if (!kDebugMode) return;
-    _logger.d('[BLE][${_time()}] DEVICE_FOUND '
-        'id=${device.id} name=${device.name} rssi=${device.rssi}');
+    _logger.d(
+      '[BLE][${_time()}] DEVICE_FOUND '
+      'id=${device.id} name=${device.name} rssi=${device.rssi}',
+    );
   }
 
   static void connectStart(BleDevice device, {int timeoutSec = 10}) {
     if (!kDebugMode) return;
-    _logger.d('[BLE][${_time()}] CONNECT_START '
-        'device=${device.name} timeout=${timeoutSec}s');
+    _logger.d(
+      '[BLE][${_time()}] CONNECT_START '
+      'device=${device.name} timeout=${timeoutSec}s',
+    );
   }
 
   static void connectOk({required int rssi, required Duration elapsed}) {
@@ -54,8 +58,10 @@ abstract final class BleLogger {
     required Duration retryIn,
   }) {
     if (!kDebugMode) return;
-    _logger.w('[BLE][${_time()}] DISCONNECT_DETECTED '
-        'retrying in=${retryIn.inSeconds}s attempt=$attempt/$maxAttempts');
+    _logger.w(
+      '[BLE][${_time()}] DISCONNECT_DETECTED '
+      'retrying in=${retryIn.inSeconds}s attempt=$attempt/$maxAttempts',
+    );
   }
 
   static void reconnectOk({required int attempt}) {
@@ -65,8 +71,10 @@ abstract final class BleLogger {
 
   static void reconnectFailed({required int attempt, required Object error}) {
     if (!kDebugMode) return;
-    _logger.e('[BLE][${_time()}] RECONNECT_FAILED '
-        'attempt=$attempt error=$error');
+    _logger.e(
+      '[BLE][${_time()}] RECONNECT_FAILED '
+      'attempt=$attempt error=$error',
+    );
   }
 
   static void lifecycleResumed() {
