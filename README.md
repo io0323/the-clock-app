@@ -77,13 +77,15 @@ lib/
 
 ## 設計の要点
 
-### BLE 接続フロー
+### BLE 接続状態機械
 
 ```
-Scan → Select → Connect → Authenticate → Ready
-          ↓ 切断検知
-   指数バックオフ再接続（1s → 2s → 4s → max 30s）
+Idle → Scanning → Connecting → Auth → Ready
+                                 ↓
+                  Error → [指数バックオフ] → Scanning
 ```
+
+再接続は指数バックオフ（1s → 2s → 4s → 8s → 16s → 最大30s）で最大5回リトライします。
 
 - `BleRepository`（interface）→ `BleRepositoryImpl`（実装）で責務を分離
 - 接続状態は `StateNotifierProvider` で一元管理し、UI は `ref.watch()` で反映
@@ -100,10 +102,45 @@ App    ──publish──▶ Broker ──subscribe──▶ Device
 - Device Shadow パターンでオフライン時の状態差分を同期
 - トピック設計は `core/constants/mqtt_topics.dart` に集約
 
+#### MQTTトピック設計
+
+| 方向 | トピック | 用途 |
+|-----|---------|------|
+| Sub | `balmuda/{deviceId}/alarm` | アラーム発火イベント受信 |
+| Sub | `balmuda/{deviceId}/sensor` | 温湿度センサーデータ |
+| Sub | `balmuda/{deviceId}/shadow/get/accepted` | デバイスシャドウ取得 |
+| Pub | `balmuda/{deviceId}/alarm/set` | アラーム設定送信 |
+| Pub | `balmuda/{deviceId}/shadow/update` | シャドウ更新 |
+
 ### アラーム管理
 
 - Domain Entity（`AlarmConfig`）→ UseCase（`PublishAlarmUsecase`）→ MQTT publish の流れ
 - アラーム発火時のバイブレーション・サウンドは OS ネイティブ通知と連携
+
+---
+
+## 実装のポイント（採用要件との対応）
+
+### 非同期処理・状態管理の設計（MUST）
+- Riverpod の `StateNotifierProvider` で BLE・アラームの状態を厳密に管理
+- 接続中に再接続処理が走らないよう `BleConnectionStatus` で排他制御
+- 通信失敗時の自動リトライを `AutoReconnectUseCase` に集約
+
+### BLE / IoTデバイス連携開発（WANT）
+- `flutter_blue_plus` でスキャン・ペアリング・再接続・状態同期を実装
+- iOS / Android の BLE パーミッション差異・バックグラウンド挙動の違いを吸収
+
+### MQTT / クラウド連携（WANT）
+- `mqtt_client` で AWS IoT Core 互換のリアルタイム通信を実装
+- デバイスシャドウ（REST API / MQTT の二段階フォールバック）
+
+### 通信トラブル時のリカバリ設計（WANT）
+- 指数バックオフによる自動再接続（BLE / MQTT 両方）
+- タイムアウト検知・切断リカバリフローを UseCase に実装
+
+### ログをもとに不具合を特定する力（WANT）
+- `BleLogger` で接続イベントを構造化ログ出力
+- アプリ側 / 通信側 / デバイス側の問題を3段階で切り分け可能
 
 ---
 
