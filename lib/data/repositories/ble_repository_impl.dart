@@ -60,8 +60,12 @@ class BleRepositoryImpl implements BleRepository {
     return _dataSource.watchStatus(device.id).map((status) {
       return BleConnectionState(
         status: status,
-        connectedDevice: status == BleConnectionStatus.connected ? device : null,
-        connectedAt: status == BleConnectionStatus.connected ? DateTime.now() : null,
+        connectedDevice: status == BleConnectionStatus.connected
+            ? device
+            : null,
+        connectedAt: status == BleConnectionStatus.connected
+            ? DateTime.now()
+            : null,
       );
     });
   }
@@ -70,9 +74,7 @@ class BleRepositoryImpl implements BleRepository {
   Future<int> readRssi() async {
     final device = _connectedDevice;
     if (device == null) {
-      throw const BleDeviceNotFoundException(
-        message: 'No device connected',
-      );
+      throw const BleDeviceNotFoundException(message: 'No device connected');
     }
 
     return _dataSource.readRssi(device.id);

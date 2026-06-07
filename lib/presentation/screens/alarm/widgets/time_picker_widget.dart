@@ -25,12 +25,16 @@ class TimePickerWidget extends ConsumerWidget {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: Text(':', style: AppTextStyles.timeDisplay.copyWith(color: AppColors.amber)),
+            child: Text(
+              ':',
+              style: AppTextStyles.timeDisplay.copyWith(color: AppColors.amber),
+            ),
           ),
           _DrumRoll(
             itemCount: 60,
             selectedIndex: ref.watch(selectedMinuteProvider),
-            onChanged: (v) => ref.read(selectedMinuteProvider.notifier).state = v,
+            onChanged: (v) =>
+                ref.read(selectedMinuteProvider.notifier).state = v,
             label: '分',
           ),
         ],
@@ -62,7 +66,9 @@ class _DrumRollState extends State<_DrumRoll> {
   @override
   void initState() {
     super.initState();
-    _controller = FixedExtentScrollController(initialItem: widget.selectedIndex);
+    _controller = FixedExtentScrollController(
+      initialItem: widget.selectedIndex,
+    );
   }
 
   @override

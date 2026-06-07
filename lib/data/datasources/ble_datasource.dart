@@ -26,19 +26,15 @@ class BleDataSource {
           await FlutterBluePlus.stopScan();
         }
 
-        final subscription = FlutterBluePlus.onScanResults.listen(
-          (results) {
-            for (final r in results) {
-              if (nameFilter != null &&
-                  !r.advertisementData.advName.startsWith(nameFilter)) {
-                continue;
-              }
-              controller.add(_toDevice(r));
+        final subscription = FlutterBluePlus.onScanResults.listen((results) {
+          for (final r in results) {
+            if (nameFilter != null &&
+                !r.advertisementData.advName.startsWith(nameFilter)) {
+              continue;
             }
-          },
-          onError: (Object e) =>
-              controller.addError(_wrapException(e)),
-        );
+            controller.add(_toDevice(r));
+          }
+        }, onError: (Object e) => controller.addError(_wrapException(e)));
 
         FlutterBluePlus.cancelWhenScanComplete(subscription);
 
@@ -47,9 +43,7 @@ class BleDataSource {
           timeout: timeout,
         );
 
-        await FlutterBluePlus.isScanning
-            .where((val) => val == false)
-            .first;
+        await FlutterBluePlus.isScanning.where((val) => val == false).first;
 
         await controller.close();
       } on Exception catch (e) {
@@ -72,9 +66,7 @@ class BleDataSource {
     } on FlutterBluePlusException catch (e) {
       throw _wrapException(e);
     } on TimeoutException {
-      throw BleConnectionTimeoutException(
-        timeoutSec: timeout.inSeconds,
-      );
+      throw BleConnectionTimeoutException(timeoutSec: timeout.inSeconds);
     } on Exception catch (e) {
       throw _wrapException(e);
     }
@@ -92,12 +84,14 @@ class BleDataSource {
 
   Stream<BleConnectionStatus> watchStatus(String deviceId) {
     final device = BluetoothDevice.fromId(deviceId);
-    return device.connectionState.map((state) => switch (state) {
-          BluetoothConnectionState.connected => BleConnectionStatus.connected,
-          BluetoothConnectionState.disconnected =>
-            BleConnectionStatus.disconnected,
-          _ => BleConnectionStatus.connecting,
-        });
+    return device.connectionState.map(
+      (state) => switch (state) {
+        BluetoothConnectionState.connected => BleConnectionStatus.connected,
+        BluetoothConnectionState.disconnected =>
+          BleConnectionStatus.disconnected,
+        _ => BleConnectionStatus.connecting,
+      },
+    );
   }
 
   Future<int> readRssi(String deviceId) async {

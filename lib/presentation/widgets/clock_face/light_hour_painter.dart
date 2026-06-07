@@ -6,10 +6,7 @@ class LightHourPainter extends CustomPainter {
   final double progress;
   final DateTime currentTime;
 
-  LightHourPainter({
-    required this.progress,
-    required this.currentTime,
-  });
+  LightHourPainter({required this.progress, required this.currentTime});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -79,8 +76,7 @@ class LightHourPainter extends CustomPainter {
     final x = center.dx + radius * cos(secondAngle);
     final y = center.dy + radius * sin(secondAngle);
 
-    final paint = Paint()
-      ..color = AppColors.amberSoft.withValues(alpha: 0.7);
+    final paint = Paint()..color = AppColors.amberSoft.withValues(alpha: 0.7);
     canvas.drawCircle(Offset(x, y), 3, paint);
   }
 

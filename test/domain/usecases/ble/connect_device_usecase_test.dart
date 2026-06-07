@@ -34,25 +34,27 @@ void main() {
 
   group('ConnectDeviceUseCase', () {
     test('connects successfully and reads RSSI', () async {
-      when(() => mockRepository.watchConnectionState()).thenAnswer(
-        (_) => Stream.value(BleConnectionState.initial),
-      );
-      when(() => mockRepository.connect(any(), timeout: any(named: 'timeout')))
-          .thenAnswer((_) async {});
+      when(
+        () => mockRepository.watchConnectionState(),
+      ).thenAnswer((_) => Stream.value(BleConnectionState.initial));
+      when(
+        () => mockRepository.connect(any(), timeout: any(named: 'timeout')),
+      ).thenAnswer((_) async {});
       when(() => mockRepository.readRssi()).thenAnswer((_) async => -55);
 
       await useCase.call(device);
 
-      verify(() => mockRepository.connect(any(), timeout: any(named: 'timeout')))
-          .called(1);
+      verify(
+        () => mockRepository.connect(any(), timeout: any(named: 'timeout')),
+      ).called(1);
       verify(() => mockRepository.readRssi()).called(1);
     });
 
     test('skips connection when already connecting', () async {
       when(() => mockRepository.watchConnectionState()).thenAnswer(
-        (_) => Stream.value(const BleConnectionState(
-          status: BleConnectionStatus.connecting,
-        )),
+        (_) => Stream.value(
+          const BleConnectionState(status: BleConnectionStatus.connecting),
+        ),
       );
 
       await useCase.call(device);
@@ -64,27 +66,30 @@ void main() {
 
     test('throws StateError when scanning', () async {
       when(() => mockRepository.watchConnectionState()).thenAnswer(
-        (_) => Stream.value(const BleConnectionState(
-          status: BleConnectionStatus.scanning,
-        )),
+        (_) => Stream.value(
+          const BleConnectionState(status: BleConnectionStatus.scanning),
+        ),
       );
 
       expect(() => useCase.call(device), throwsStateError);
     });
 
     test('connects even if readRssi fails', () async {
-      when(() => mockRepository.watchConnectionState()).thenAnswer(
-        (_) => Stream.value(BleConnectionState.initial),
-      );
-      when(() => mockRepository.connect(any(), timeout: any(named: 'timeout')))
-          .thenAnswer((_) async {});
-      when(() => mockRepository.readRssi())
-          .thenThrow(Exception('RSSI read failed'));
+      when(
+        () => mockRepository.watchConnectionState(),
+      ).thenAnswer((_) => Stream.value(BleConnectionState.initial));
+      when(
+        () => mockRepository.connect(any(), timeout: any(named: 'timeout')),
+      ).thenAnswer((_) async {});
+      when(
+        () => mockRepository.readRssi(),
+      ).thenThrow(Exception('RSSI read failed'));
 
       await useCase.call(device);
 
-      verify(() => mockRepository.connect(any(), timeout: any(named: 'timeout')))
-          .called(1);
+      verify(
+        () => mockRepository.connect(any(), timeout: any(named: 'timeout')),
+      ).called(1);
     });
   });
 }

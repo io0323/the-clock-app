@@ -98,18 +98,15 @@ class _RssiBar extends StatelessWidget {
               color: value > 0.6
                   ? AppColors.success
                   : value > 0.3
-                      ? AppColors.warning
-                      : AppColors.error,
+                  ? AppColors.warning
+                  : AppColors.error,
             ),
           ),
         ),
         const SizedBox(width: 8),
         Text(
           '$rssi dBm',
-          style: GoogleFonts.dmMono(
-            fontSize: 9,
-            color: AppColors.textDim,
-          ),
+          style: GoogleFonts.dmMono(fontSize: 9, color: AppColors.textDim),
         ),
       ],
     );

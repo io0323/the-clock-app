@@ -8,33 +8,36 @@ import '../../domain/entities/device_shadow.dart';
 
 class RestDataSource {
   RestDataSource() {
-    _dio = Dio(BaseOptions(
-      baseUrl: Env.apiBaseUrl,
-      connectTimeout: const Duration(seconds: 10),
-      receiveTimeout: const Duration(seconds: 30),
-    ));
+    _dio = Dio(
+      BaseOptions(
+        baseUrl: Env.apiBaseUrl,
+        connectTimeout: const Duration(seconds: 10),
+        receiveTimeout: const Duration(seconds: 30),
+      ),
+    );
 
     if (kDebugMode) {
-      _dio.interceptors.add(LogInterceptor(
-        requestBody: true,
-        responseBody: true,
-      ));
+      _dio.interceptors.add(
+        LogInterceptor(requestBody: true, responseBody: true),
+      );
     }
 
-    _dio.interceptors.add(InterceptorsWrapper(
-      onError: (error, handler) async {
-        if (error.response?.statusCode == 401) {
-          try {
-            await _refreshToken();
-            final retryResponse = await _dio.fetch(error.requestOptions);
-            return handler.resolve(retryResponse);
-          } on Exception {
-            return handler.next(error);
+    _dio.interceptors.add(
+      InterceptorsWrapper(
+        onError: (error, handler) async {
+          if (error.response?.statusCode == 401) {
+            try {
+              await _refreshToken();
+              final retryResponse = await _dio.fetch(error.requestOptions);
+              return handler.resolve(retryResponse);
+            } on Exception {
+              return handler.next(error);
+            }
           }
-        }
-        return handler.next(error);
-      },
-    ));
+          return handler.next(error);
+        },
+      ),
+    );
   }
 
   late final Dio _dio;
@@ -61,8 +64,10 @@ class RestDataSource {
       );
       return DeviceShadow.fromJson(response.data!);
     } on DioException catch (e) {
-      throw ApiException(e.message ?? 'Failed to update shadow',
-          code: 'API_PUT');
+      throw ApiException(
+        e.message ?? 'Failed to update shadow',
+        code: 'API_PUT',
+      );
     }
   }
 
@@ -75,15 +80,11 @@ class RestDataSource {
           .map((e) => AlarmConfig.fromJson(e as Map<String, dynamic>))
           .toList();
     } on DioException catch (e) {
-      throw ApiException(e.message ?? 'Failed to get alarms',
-          code: 'API_GET');
+      throw ApiException(e.message ?? 'Failed to get alarms', code: 'API_GET');
     }
   }
 
-  Future<AlarmConfig> createAlarm(
-    String deviceId,
-    AlarmConfig alarm,
-  ) async {
+  Future<AlarmConfig> createAlarm(String deviceId, AlarmConfig alarm) async {
     try {
       final response = await _dio.post<Map<String, dynamic>>(
         '/devices/$deviceId/alarms',
@@ -91,8 +92,10 @@ class RestDataSource {
       );
       return AlarmConfig.fromJson(response.data!);
     } on DioException catch (e) {
-      throw ApiException(e.message ?? 'Failed to create alarm',
-          code: 'API_POST');
+      throw ApiException(
+        e.message ?? 'Failed to create alarm',
+        code: 'API_POST',
+      );
     }
   }
 

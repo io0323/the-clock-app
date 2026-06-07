@@ -31,16 +31,15 @@ final autoReconnectUseCaseProvider = Provider<AutoReconnectUseCase>((ref) {
   return AutoReconnectUseCase(ref.watch(bleRepositoryProvider));
 });
 
-final bleConnectionStateProvider =
-    StreamProvider<BleConnectionState>((ref) {
+final bleConnectionStateProvider = StreamProvider<BleConnectionState>((ref) {
   final repository = ref.watch(bleRepositoryProvider);
   return repository.watchConnectionState();
 });
 
 final scannedDevicesProvider =
     StateNotifierProvider<ScannedDevicesNotifier, List<BleDevice>>((ref) {
-  return ScannedDevicesNotifier(ref.watch(scanDevicesUseCaseProvider));
-});
+      return ScannedDevicesNotifier(ref.watch(scanDevicesUseCaseProvider));
+    });
 
 class ScannedDevicesNotifier extends StateNotifier<List<BleDevice>> {
   ScannedDevicesNotifier(this._scanUseCase) : super(const []);
@@ -51,17 +50,14 @@ class ScannedDevicesNotifier extends StateNotifier<List<BleDevice>> {
   void startScan() {
     state = const [];
     _subscription?.cancel();
-    _subscription = _scanUseCase.call().listen(
-      (device) {
-        final index = state.indexWhere((d) => d.id == device.id);
-        if (index >= 0) {
-          state = [...state]..[index] = device;
-        } else {
-          state = [...state, device];
-        }
-      },
-      onDone: () => _subscription = null,
-    );
+    _subscription = _scanUseCase.call().listen((device) {
+      final index = state.indexWhere((d) => d.id == device.id);
+      if (index >= 0) {
+        state = [...state]..[index] = device;
+      } else {
+        state = [...state, device];
+      }
+    }, onDone: () => _subscription = null);
   }
 
   void stopScan() {

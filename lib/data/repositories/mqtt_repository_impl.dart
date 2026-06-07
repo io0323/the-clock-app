@@ -63,9 +63,12 @@ class MqttRepositoryImpl implements MqttRepository {
         .where((msg) => msg.topic == topics.shadow)
         .map((msg) => DeviceShadow.fromJson(msg.payload))
         .first
-        .timeout(const Duration(seconds: 5), onTimeout: () {
-      throw const MqttTimeoutException(timeoutSec: 5);
-    });
+        .timeout(
+          const Duration(seconds: 5),
+          onTimeout: () {
+            throw const MqttTimeoutException(timeoutSec: 5);
+          },
+        );
 
     await _mqttDataSource.publish(topics.shadowGet, {});
 
