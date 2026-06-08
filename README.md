@@ -1,11 +1,11 @@
-# The Clock App — BALMUDA Connect 再設計
+# The Clock App — Connect 再設計
 
 ![CI](https://github.com/io0323/the-clock-app/workflows/CI/badge.svg)
 ![Flutter](https://img.shields.io/badge/Flutter-3.x-02569B?logo=flutter)
 ![Dart](https://img.shields.io/badge/Dart-3.x-0175C2?logo=dart)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
-> BALMUDA「The Clock」向け Flutter ポートフォリオアプリ。
+> 「The Clock」向け Flutter ポートフォリオアプリ。
 > BLE通信・MQTT/クラウド連携・非同期状態管理を横断した設計が中核。
 
 ## スクリーンショット
@@ -111,11 +111,11 @@ App    ──publish──▶ Broker ──subscribe──▶ Device
 
 | 方向 | トピック | 用途 |
 |-----|---------|------|
-| Sub | `balmuda/{deviceId}/alarm` | アラーム発火イベント受信 |
-| Sub | `balmuda/{deviceId}/sensor` | 温湿度センサーデータ |
-| Sub | `balmuda/{deviceId}/shadow/get/accepted` | デバイスシャドウ取得 |
-| Pub | `balmuda/{deviceId}/alarm/set` | アラーム設定送信 |
-| Pub | `balmuda/{deviceId}/shadow/update` | シャドウ更新 |
+| Sub | `io0323/{deviceId}/alarm` | アラーム発火イベント受信 |
+| Sub | `io0323/{deviceId}/sensor` | 温湿度センサーデータ |
+| Sub | `io0323/{deviceId}/shadow/get/accepted` | デバイスシャドウ取得 |
+| Pub | `io0323/{deviceId}/alarm/set` | アラーム設定送信 |
+| Pub | `io0323/{deviceId}/shadow/update` | シャドウ更新 |
 
 ### アラーム管理
 
